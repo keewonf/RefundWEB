@@ -6,7 +6,7 @@ export function AuthLayout() {
   return (
     <div className="w-screen min-h-screen bg-gray-400 flex flex-col justify-center items-center text-gray-100 ">
       <main className="bg-gray-500 p-8 rounded-md flex items-center flex-col md:min-w-115.5">
-        <img src={logoSvg} alt="logo" className="my-8" />
+        <img src={logoSvg} alt="logo" className="mb-8" />
         <Outlet />
       </main>
     </div>

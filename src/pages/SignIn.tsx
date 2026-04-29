@@ -62,7 +62,7 @@ export function SignIn() {
       </Button>
       <Link
         to="/signup"
-        className="text-center hover:text-green-800 text-sm font-semibold text-gray-100 mt-4 mb-4 transition ease-linear"
+        className="text-center hover:text-green-800 text-sm font-semibold text-gray-100 mt-4 mtransition ease-linear"
       >
         Criar conta
       </Link>
