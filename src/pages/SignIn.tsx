@@ -1,6 +1,7 @@
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
 import { Controller, useForm } from "react-hook-form";
+import { Link } from "react-router";
 
 type FormData = {
   email: string;
@@ -59,6 +60,12 @@ export function SignIn() {
       <Button type="submit" isLoading={isSubmitting}>
         Entrar
       </Button>
+      <Link
+        to="/signup"
+        className="text-center hover:text-green-800 text-sm font-semibold text-gray-100 mt-4 mb-4 transition ease-linear"
+      >
+        Criar conta
+      </Link>
     </form>
   );
 }
