@@ -1,17 +1,64 @@
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
+import { Controller, useForm } from "react-hook-form";
+
+type FormData = {
+  email: string;
+  password: string;
+};
 
 export function SignIn() {
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<FormData>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  function onSubmit(data: FormData) {
+    console.log(data);
+  }
+
   return (
-    <form className="w-full flex flex-col gap-4">
-      <Input
-        required
-        type="email"
-        legend="E-MAIL"
-        placeholder="seu@email.com"
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full flex flex-col gap-4"
+    >
+      <Controller
+        control={control}
+        name="email"
+        render={({ field }) => (
+          <Input
+            required
+            type="email"
+            legend="E-MAIL"
+            placeholder="seu@email.com"
+            {...field}
+          />
+        )}
       />
-      <Input required legend="SENHA" type="password" placeholder="123456" />
-      <Button type="submit">Entrar</Button>
+
+      <Controller
+        control={control}
+        name="password"
+        render={({ field }) => (
+          <Input
+            required
+            legend="SENHA"
+            type="password"
+            placeholder="123456"
+            {...field}
+          />
+        )}
+      />
+
+      <Button type="submit" isLoading={isSubmitting}>
+        Entrar
+      </Button>
     </form>
   );
 }
