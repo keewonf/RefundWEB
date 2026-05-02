@@ -3,6 +3,7 @@ import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import { Select } from "../components/Select";
 import { CATEGORIES, CATEGORIES_KEYS } from "../utils/categories";
+import { Upload } from "../components/Upload";
 
 type Category = keyof typeof CATEGORIES;
 
@@ -22,7 +23,7 @@ export function Refund() {
     defaultValues: {
       requestName: "",
       category: "",
-      value: 0.0,
+      value: 0,
       paymentReceipt: "",
     },
   });
@@ -53,38 +54,35 @@ export function Refund() {
           )}
         />
         <div className="flex gap-4">
-          <Controller
-            control={control}
-            name="category"
-            render={({ field }) => (
-              <Select required legend="Categoria" {...field}>
-                {CATEGORIES_KEYS.map((category) => (
-                  <option key={category} value={category}>
-                    {CATEGORIES[category].name}
-                  </option>
-                ))}
-              </Select>
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="value"
-            render={({ field }) => <Input required legend="Valor" {...field} />}
-          />
+          <div className="flex-1">
+            <Controller
+              control={control}
+              name="category"
+              render={({ field }) => (
+                <Select required legend="Categoria" {...field}>
+                  {CATEGORIES_KEYS.map((category) => (
+                    <option key={category} value={category}>
+                      {CATEGORIES[category].name}
+                    </option>
+                  ))}
+                </Select>
+              )}
+            />
+          </div>
+          <div className="w-32 md:w-38.5">
+            <Controller
+              control={control}
+              name="value"
+              render={({ field }) => (
+                <Input required legend="Valor" {...field} />
+              )}
+            />
+          </div>
         </div>
         <Controller
           control={control}
           name="paymentReceipt"
-          render={({ field }) => (
-            <Input
-              required
-              legend="Comprovante"
-              type="file"
-              placeholder="Nome do arquivo.pdf"
-              {...field}
-            />
-          )}
+          render={({ field }) => <Upload required {...field} />}
         />
 
         <Button type="submit" isLoading={isSubmitting}>
