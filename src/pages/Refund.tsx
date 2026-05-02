@@ -2,10 +2,13 @@ import { useForm, Controller } from "react-hook-form";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import { Select } from "../components/Select";
+import { CATEGORIES, CATEGORIES_KEYS } from "../utils/categories";
+
+type Category = keyof typeof CATEGORIES;
 
 type FormData = {
   requestName: string;
-  category: string;
+  category: Category | "";
   value: number;
   paymentReceipt: string;
 };
@@ -52,7 +55,15 @@ export function Refund() {
       <Controller
         control={control}
         name="category"
-        render={({ field }) => <Select required legend="Categoria" {...field} />}
+        render={({ field }) => (
+          <Select required legend="Categoria" {...field}>
+            {CATEGORIES_KEYS.map((category) => (
+              <option key={category} value={category}>
+                {CATEGORIES[category].name}
+              </option>
+            ))}
+          </Select>
+        )}
       />
 
       <Controller
