@@ -11,7 +11,7 @@ type FormData = {
   requestName: string;
   category: Category | "";
   value: number;
-  paymentReceipt: string;
+  file: File | null;
 };
 
 export function Refund() {
@@ -24,7 +24,7 @@ export function Refund() {
       requestName: "",
       category: "",
       value: 0,
-      paymentReceipt: "",
+      file: null,
     },
   });
 
@@ -69,7 +69,7 @@ export function Refund() {
               )}
             />
           </div>
-          <div className="w-32 md:w-38.5">
+          <div className="w-28 md:w-38.5">
             <Controller
               control={control}
               name="value"
@@ -81,8 +81,8 @@ export function Refund() {
         </div>
         <Controller
           control={control}
-          name="paymentReceipt"
-          render={({ field }) => <Upload required {...field} />}
+          name="file"
+          render={({ field }) => <Upload required onChange={field.onChange} filename={field.value?.name} />}
         />
 
         <Button type="submit" isLoading={isSubmitting}>

@@ -4,7 +4,7 @@ type Props = React.ComponentProps<"input"> & {
   filename?: string | null;
 };
 
-export function Upload({ filename = null, ...rest }: Props) {
+export function Upload({ filename = null, onChange, ...rest }: Props) {
   return (
     <div>
       <legend className="uppercase  text-xxs mb-2 text-gray-200">
@@ -12,7 +12,16 @@ export function Upload({ filename = null, ...rest }: Props) {
       </legend>
 
       <div className="w-full h-12 flex items-center rounded-lg border border-gray-300 text-sm text-gray-100 bg-transparent outline-none">
-        <input type="file" className="hidden" id="upload" {...rest} />
+        <input
+          type="file"
+          className="hidden"
+          id="upload"
+          {...rest}
+          onChange={(e) => {
+            const file = e.target.files?.[0] ?? null;
+            onChange?.(file as any);
+          }}
+        />
 
         <span className="text-sm text-gray-200 flex-1 pl-4">
           {filename ?? "Nome do arquivo.pdf"}
