@@ -32,63 +32,65 @@ export function Refund() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="bg-gray-500 w-full rounded-xl flex flex-col p-10 gap-6 lg:min-w-lg"
-    >
-      <header>
-        <h1 className="text-xl font-bold text-gray-100">
-          Solicitação de reembolso
-        </h1>
-        <p className="text-sm text-gray-200 mt-2 mb-4">
-          Dados da despesa para solicitar reembolso.{" "}
-        </p>
-      </header>
-      <Controller
-        control={control}
-        name="requestName"
-        render={({ field }) => (
-          <Input required legend="Nome da solicitação" {...field} />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="category"
-        render={({ field }) => (
-          <Select required legend="Categoria" {...field}>
-            {CATEGORIES_KEYS.map((category) => (
-              <option key={category} value={category}>
-                {CATEGORIES[category].name}
-              </option>
-            ))}
-          </Select>
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="value"
-        render={({ field }) => <Input required legend="Valor" {...field} />}
-      />
-
-      <Controller
-        control={control}
-        name="paymentReceipt"
-        render={({ field }) => (
-          <Input
-            required
-            legend="Comprovante"
-            type="file"
-            placeholder="Nome do arquivo.pdf"
-            {...field}
+    <div className="flex justify-center">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="bg-gray-500 rounded-xl flex flex-col p-10 gap-6 lg:min-w-lg"
+      >
+        <header>
+          <h1 className="text-xl font-bold text-gray-100">
+            Solicitação de reembolso
+          </h1>
+          <p className="text-sm text-gray-200 mt-2 mb-4">
+            Dados da despesa para solicitar reembolso.{" "}
+          </p>
+        </header>
+        <Controller
+          control={control}
+          name="requestName"
+          render={({ field }) => (
+            <Input required legend="Nome da solicitação" {...field} />
+          )}
+        />
+        <div className="flex gap-4">
+          <Controller
+            control={control}
+            name="category"
+            render={({ field }) => (
+              <Select required legend="Categoria" {...field}>
+                {CATEGORIES_KEYS.map((category) => (
+                  <option key={category} value={category}>
+                    {CATEGORIES[category].name}
+                  </option>
+                ))}
+              </Select>
+            )}
           />
-        )}
-      />
 
-      <Button type="submit" isLoading={isSubmitting}>
-        Enviar
-      </Button>
-    </form>
+          <Controller
+            control={control}
+            name="value"
+            render={({ field }) => <Input required legend="Valor" {...field} />}
+          />
+        </div>
+        <Controller
+          control={control}
+          name="paymentReceipt"
+          render={({ field }) => (
+            <Input
+              required
+              legend="Comprovante"
+              type="file"
+              placeholder="Nome do arquivo.pdf"
+              {...field}
+            />
+          )}
+        />
+
+        <Button type="submit" isLoading={isSubmitting}>
+          Enviar
+        </Button>
+      </form>
+    </div>
   );
 }
