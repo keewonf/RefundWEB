@@ -3,12 +3,14 @@ import { AppLayout } from "../components/AppLayout";
 
 import { NotFound } from "../pages/NotFound";
 import { Refund } from "../pages/Refund";
+import { Confirm } from "../pages/Confirm";
 
 export function EmployeeRoutes() {
   return (
     <Routes>
       <Route path="/" element={<AppLayout />}>
         <Route path="/" element={<Refund />} />
+        <Route path="/confirm" element={<Confirm />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
