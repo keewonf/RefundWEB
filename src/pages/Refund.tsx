@@ -4,6 +4,7 @@ import { Button } from "../components/Button";
 import { Select } from "../components/Select";
 import { CATEGORIES, CATEGORIES_KEYS } from "../utils/categories";
 import { Upload } from "../components/Upload";
+import { useNavigate } from "react-router";
 
 type Category = keyof typeof CATEGORIES;
 
@@ -28,8 +29,11 @@ export function Refund() {
     },
   });
 
+  const navigate = useNavigate();
+
   function onSubmit(data: FormData) {
     console.log(data);
+    navigate("/confirm", { state: { fromSubmit: true } });
   }
 
   return (
@@ -82,7 +86,13 @@ export function Refund() {
         <Controller
           control={control}
           name="file"
-          render={({ field }) => <Upload required onChange={field.onChange} filename={field.value?.name} />}
+          render={({ field }) => (
+            <Upload
+              required
+              onChange={field.onChange}
+              filename={field.value?.name}
+            />
+          )}
         />
 
         <Button type="submit" isLoading={isSubmitting}>
