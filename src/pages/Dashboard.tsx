@@ -1,6 +1,6 @@
 import { useForm, Controller } from "react-hook-form";
 import { Input } from "../components/Input";
-import searchSvg from "../assets/search.svg"
+import searchSvg from "../assets/search.svg";
 import { Button } from "../components/Button";
 
 type FormData = {
@@ -37,8 +37,8 @@ export function Dashboard() {
           )}
         />
 
-        <Button variant="iconSmall">
-          <img src={searchSvg} alt="Ícone de pesquisar" className="w-5"/>
+        <Button type="submit" variant="icon">
+          <img src={searchSvg} alt="Ícone de pesquisar" className="w-5" />
         </Button>
       </form>
     </div>
