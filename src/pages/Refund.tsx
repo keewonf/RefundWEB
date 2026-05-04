@@ -4,7 +4,7 @@ import { Button } from "../components/Button";
 import { Select } from "../components/Select";
 import { CATEGORIES, CATEGORIES_KEYS } from "../utils/categories";
 import { Upload } from "../components/Upload";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 type Category = keyof typeof CATEGORIES;
 
@@ -30,9 +30,13 @@ export function Refund() {
   });
 
   const navigate = useNavigate();
+  const params = useParams<{ id: string }>();
 
   function onSubmit(data: FormData) {
-    console.log(data);
+    if (params.id) {
+      return navigate(-1);
+    }
+
     navigate("/confirm", { state: { fromSubmit: true } });
   }
 
@@ -54,7 +58,12 @@ export function Refund() {
           control={control}
           name="requestName"
           render={({ field }) => (
-            <Input required legend="Nome da solicitação" {...field} />
+            <Input
+              required
+              legend="Nome da solicitação"
+              disabled={!!params.id}
+              {...field}
+            />
           )}
         />
         <div className="flex gap-4">
@@ -63,7 +72,12 @@ export function Refund() {
               control={control}
               name="category"
               render={({ field }) => (
-                <Select required legend="Categoria" {...field}>
+                <Select
+                  required
+                  legend="Categoria"
+                  disabled={!!params.id}
+                  {...field}
+                >
                   {CATEGORIES_KEYS.map((category) => (
                     <option key={category} value={category}>
                       {CATEGORIES[category].name}
@@ -78,7 +92,12 @@ export function Refund() {
               control={control}
               name="value"
               render={({ field }) => (
-                <Input required legend="Valor" {...field} />
+                <Input
+                  required
+                  legend="Valor"
+                  disabled={!!params.id}
+                  {...field}
+                />
               )}
             />
           </div>
@@ -96,7 +115,7 @@ export function Refund() {
         />
 
         <Button type="submit" isLoading={isSubmitting}>
-          Enviar
+          {params.id ? "Voltar" : "Enviar"}
         </Button>
       </form>
     </div>
