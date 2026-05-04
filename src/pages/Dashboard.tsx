@@ -2,9 +2,19 @@ import { useForm, Controller } from "react-hook-form";
 import { Input } from "../components/Input";
 import searchSvg from "../assets/search.svg";
 import { Button } from "../components/Button";
+import { RefundItem } from "../components/RefundItem";
+import { CATEGORIES } from "../utils/categories";
 
 type FormData = {
   name: string;
+};
+
+const REFUND_EXAMPLE = {
+  id: "123",
+  name: "Rodrigo",
+  category: "Transporte",
+  amount: "34,5",
+  categoryImg: CATEGORIES["transport"].icon,
 };
 
 export function Dashboard() {
@@ -37,10 +47,13 @@ export function Dashboard() {
           )}
         />
 
-        <Button type="submit" variant="icon">
+        <Button type="submit" variant="icon" isLoading={isSubmitting}>
           <img src={searchSvg} alt="Ícone de pesquisar" className="w-5" />
         </Button>
       </form>
+      <div>
+        <RefundItem data={REFUND_EXAMPLE} />
+      </div>
     </div>
   );
 }
