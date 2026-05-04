@@ -4,6 +4,7 @@ import searchSvg from "../assets/search.svg";
 import { Button } from "../components/Button";
 import { RefundItem } from "../components/RefundItem";
 import { CATEGORIES } from "../utils/categories";
+import { formatCurrency } from "../utils/formatCurrency";
 
 type FormData = {
   name: string;
@@ -13,7 +14,7 @@ const REFUND_EXAMPLE = {
   id: "123",
   name: "Rodrigo",
   category: "Transporte",
-  amount: "34,5",
+  amount: formatCurrency(34.5),
   categoryImg: CATEGORIES["transport"].icon,
 };
 
@@ -51,7 +52,7 @@ export function Dashboard() {
           <img src={searchSvg} alt="Ícone de pesquisar" className="w-5" />
         </Button>
       </form>
-      <div>
+      <div className="mt-6 flex flex-col gap-4 max-h-85.5 overflow-y-scroll">
         <RefundItem data={REFUND_EXAMPLE} />
       </div>
     </div>
