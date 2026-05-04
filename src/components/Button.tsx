@@ -26,8 +26,9 @@ export function Button({
       type={type}
       disabled={isLoading}
       className={classMerge([
-        "flex justify-center items-center bg-green-100  rounded-lg text-white text-sm font-bold cursor-pointer hover:bg-green-200 transition ease-linear disabled:opacity-50 disabled:cursor-progress",
+        "flex justify-center items-center bg-green-100  rounded-lg text-white text-sm font-bold cursor-pointer hover:bg-green-200 transition ease-linear disabled:opacity-50",
         variants.button[variant],
+        isLoading && "cursor-progress",
         className,
       ])}
       {...rest}
