@@ -2,6 +2,7 @@ import { useForm, Controller } from "react-hook-form";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import { Select } from "../components/Select";
+import fileSvg from "../assets/file.svg";
 import { CATEGORIES, CATEGORIES_KEYS } from "../utils/categories";
 import { Upload } from "../components/Upload";
 import { useNavigate, useParams } from "react-router";
@@ -102,17 +103,29 @@ export function Refund() {
             />
           </div>
         </div>
-        <Controller
-          control={control}
-          name="file"
-          render={({ field }) => (
-            <Upload
-              required
-              onChange={field.onChange}
-              filename={field.value?.name}
-            />
-          )}
-        />
+
+        {params.id ? (
+          <a
+            className="flex justify-center text-green-100 text-sm font-semibold items-center gap-2 my-6 hover:opacity-70 transition ease-linear"
+            href=""
+            target="_blank"
+          >
+            <img src={fileSvg} alt="Ícone de arquivo" />
+            Abrir comprovante
+          </a>
+        ) : (
+          <Controller
+            control={control}
+            name="file"
+            render={({ field }) => (
+              <Upload
+                required
+                onChange={field.onChange}
+                filename={field.value?.name}
+              />
+            )}
+          />
+        )}
 
         <Button type="submit" isLoading={isSubmitting}>
           {params.id ? "Voltar" : "Enviar"}
