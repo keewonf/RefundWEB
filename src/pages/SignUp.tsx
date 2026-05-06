@@ -47,13 +47,13 @@ export function SignUp() {
       await api.post("/users", data);
 
       navigate("/");
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.log(error);
 
-      if (e instanceof AxiosError) {
+      if (error instanceof AxiosError) {
         setError("email", {
           type: "server",
-          message: e.response?.data.message,
+          message: error.response?.data.message,
         });
         return;
       }
