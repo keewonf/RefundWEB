@@ -1,15 +1,19 @@
-import { Controller, useForm } from "react-hook-form";
-import { Input } from "../components/Input";
-import { Button } from "../components/Button";
-import { Link } from "react-router";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AxiosError} from "axios"
+import { api } from "../services/api";
 
-const schema = z
+import { useNavigate } from "react-router";
+import { Controller, useForm } from "react-hook-form";
+import { Link } from "react-router";
+import { Input } from "../components/Input";
+import { Button } from "../components/Button";
+
+const signUpSchema = z
   .object({
-    name: z.string().min(1, "Nome é obrigatório"),
-    email: z.email(),
-    password: z.string().min(6, "Password must have at least 6 characters"),
+    name: z.string().trim().min(1, "Informe o nome"),
+    email: z.email("E-mail inválido"),
+    password: z.string().min(6, "Senha deve ter pelo menos 6 dígitos"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -17,7 +21,7 @@ const schema = z
     path: ["confirmPassword"],
   });
 
-type FormData = z.infer<typeof schema>;
+type FormData = z.infer<typeof signUpSchema>;
 
 export function SignUp() {
   const {
@@ -31,11 +35,26 @@ export function SignUp() {
       password: "",
       confirmPassword: "",
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(signUpSchema),
   });
 
-  function onSubmit(data: FormData) {
+  const navigate = useNavigate();
+
+  async function onSubmit(data: FormData) {
     console.log(data);
+    try {
+      await api.post("/users", data);
+
+      navigate("/");
+    } catch (e) {
+      console.log(e);
+
+      if(e instanceof AxiosError) {
+        return alert(e.response?.data.message)
+      }
+
+      alert("Não foi possível cadastrar! Tente novamente mais tarde.");
+    }
   }
 
   return (
