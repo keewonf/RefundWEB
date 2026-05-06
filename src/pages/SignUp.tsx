@@ -2,19 +2,28 @@ import { Controller, useForm } from "react-hook-form";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import { Link } from "react-router";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-type FormData = {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
+const schema = z
+  .object({
+    name: z.string().min(1, "Nome é obrigatório"),
+    email: z.email(),
+    password: z.string().min(6, "Password must have at least 6 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As senhas não conferem",
+    path: ["confirmPassword"],
+  });
+
+type FormData = z.infer<typeof schema>;
 
 export function SignUp() {
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm<FormData>({
     defaultValues: {
       name: "",
@@ -22,6 +31,7 @@ export function SignUp() {
       password: "",
       confirmPassword: "",
     },
+    resolver: zodResolver(schema),
   });
 
   function onSubmit(data: FormData) {
@@ -37,7 +47,13 @@ export function SignUp() {
         control={control}
         name="name"
         render={({ field }) => (
-          <Input required legend="nome" placeholder="Seu nome" {...field} />
+          <Input
+            required
+            legend="nome"
+            placeholder="Seu nome"
+            error={errors.name?.message}
+            {...field}
+          />
         )}
       />
       <Controller
@@ -48,7 +64,9 @@ export function SignUp() {
             required
             type="email"
             legend="e-mail"
+            autoComplete="email"
             placeholder="seu@email.com"
+            error={errors.email?.message}
             {...field}
           />
         )}
@@ -60,8 +78,10 @@ export function SignUp() {
           <Input
             required
             type="password"
+            autoComplete="new-password"
             legend="senha"
             placeholder="123456"
+            error={errors.password?.message}
             {...field}
           />
         )}
@@ -73,8 +93,10 @@ export function SignUp() {
           <Input
             required
             type="password"
+            autoComplete="new-password"
             legend="Confirmação da senha"
             placeholder="123456"
+            error={errors.confirmPassword?.message}
             {...field}
           />
         )}
