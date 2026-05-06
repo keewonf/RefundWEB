@@ -15,7 +15,7 @@ const session = {
 
 export function Routes() {
   function Route() {
-    switch (session.user.role) {
+    switch (session?.user.role) {
       case "manager":
         return <ManagerRoutes/>
       case "employee":
