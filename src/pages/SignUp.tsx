@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AxiosError} from "axios"
+import { AxiosError } from "axios";
 import { api } from "../services/api";
 
 import { useNavigate } from "react-router";
@@ -27,6 +27,7 @@ export function SignUp() {
   const {
     control,
     handleSubmit,
+    setError,
     formState: { isSubmitting, errors },
   } = useForm<FormData>({
     defaultValues: {
@@ -49,11 +50,18 @@ export function SignUp() {
     } catch (e) {
       console.log(e);
 
-      if(e instanceof AxiosError) {
-        return alert(e.response?.data.message)
+      if (e instanceof AxiosError) {
+        setError("email", {
+          type: "server",
+          message: e.response?.data.message,
+        });
+        return;
       }
 
-      alert("Não foi possível cadastrar! Tente novamente mais tarde.");
+      setError("root", {
+        type: "server",
+        message: "Erro inesperado. Tente novamente.",
+      });
     }
   }
 
