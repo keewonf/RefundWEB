@@ -1,4 +1,4 @@
-import { z, ZodError } from "zod";
+import { z } from "zod";
 import { AxiosError } from "axios";
 
 import { api } from "../services/api";
@@ -32,13 +32,13 @@ export function SignIn() {
     resolver: zodResolver(signInSchema),
   });
 
-  const auth = useAuth()
+  const auth = useAuth();
 
   async function onSubmit(data: FormData) {
     console.log(data);
     try {
       const response = await api.post("/sessions", data);
-      auth.save(response.data)
+      auth.save(response.data);
     } catch (error) {
       if (error instanceof AxiosError) {
         const message =
