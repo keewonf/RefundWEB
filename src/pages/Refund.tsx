@@ -1,33 +1,59 @@
+import fileSvg from "../assets/file.svg";
+import { CATEGORIES, CATEGORIES_KEYS } from "../utils/categories";
+
 import { useForm, Controller } from "react-hook-form";
+import { useNavigate, useParams } from "react-router";
+import { z } from "zod";
+
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import { Select } from "../components/Select";
-import fileSvg from "../assets/file.svg";
-import { CATEGORIES, CATEGORIES_KEYS } from "../utils/categories";
 import { Upload } from "../components/Upload";
-import { useNavigate, useParams } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AxiosError } from "axios";
 
 type Category = keyof typeof CATEGORIES;
 
-type FormData = {
-  requestName: string;
-  category: Category | "";
-  value: number;
-  file: File | null;
-};
+const categories = [
+  "food",
+  "others",
+  "services",
+  "transport",
+  "accommodation",
+] as const;
+
+const refundSchema = z.object({
+  name: z
+    .string()
+    .min(3, { message: "Informe um nome claro para sua solicitação" }),
+  category: z.enum(categories, {
+    message: "Selecione uma categoria",
+  }),
+  amount: z.number().positive("O valor deve ser positivo"),
+  file: z
+    .file()
+    .nullable()
+    .refine((file) => file !== null, {
+      message: "Selecione um arquivo",
+    }),
+});
+
+type FormData = z.input<typeof refundSchema>;
 
 export function Refund() {
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting },
+    setError,
+    formState: { isSubmitting, errors },
   } = useForm<FormData>({
     defaultValues: {
-      requestName: "",
-      category: "",
-      value: 0,
-      file: null,
+      name: "",
+      category: undefined,
+      amount: 0,
+      file: undefined,
     },
+    resolver: zodResolver(refundSchema),
   });
 
   const navigate = useNavigate();
@@ -38,7 +64,25 @@ export function Refund() {
       return navigate(-1);
     }
 
-    navigate("/confirm", { state: { fromSubmit: true } });
+    try {
+      console.log(data);
+      navigate("/confirm", { state: { fromSubmit: true } });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const message =
+          error.response?.data?.message ?? "Erro de conexão com o servidor";
+        setError("root", {
+          message,
+        });
+        return;
+      }
+
+      setError("root", {
+        message: "Erro inesperado. Tente novamente",
+      });
+
+      return;
+    }
   }
 
   return (
@@ -57,11 +101,12 @@ export function Refund() {
         </header>
         <Controller
           control={control}
-          name="requestName"
+          name="name"
           render={({ field }) => (
             <Input
               required
               legend="Nome da solicitação"
+              error={errors.name?.message}
               disabled={!!params.id}
               {...field}
             />
@@ -75,6 +120,7 @@ export function Refund() {
               render={({ field }) => (
                 <Select
                   required
+                  error={errors.category?.message}
                   legend="Categoria"
                   disabled={!!params.id}
                   {...field}
@@ -91,13 +137,19 @@ export function Refund() {
           <div className="w-28 md:w-38.5">
             <Controller
               control={control}
-              name="value"
+              name="amount"
               render={({ field }) => (
                 <Input
                   required
                   legend="Valor"
+                  error={errors.amount?.message}
                   disabled={!!params.id}
                   {...field}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(",", ".");
+
+                    field.onChange(Number(value));
+                  }}
                 />
               )}
             />
@@ -120,12 +172,17 @@ export function Refund() {
             render={({ field }) => (
               <Upload
                 required
+                error={errors.file?.message}
                 onChange={field.onChange}
                 filename={field.value?.name}
               />
             )}
           />
         )}
+
+        <p className="text-sm text-red-600 text-center my-4 font-medium">
+          {errors.root?.message}
+        </p>
 
         <Button type="submit" isLoading={isSubmitting}>
           {params.id ? "Voltar" : "Enviar"}
