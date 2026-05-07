@@ -1,11 +1,12 @@
-import { Button } from "../components/Button";
-import { Input } from "../components/Input";
-import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router";
-import { z, ZodError } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "../services/api";
 import { AxiosError } from "axios";
+import { z, ZodError } from "zod";
+import { Controller, useForm } from "react-hook-form";
+import { Link } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Button } from "../components/Button";
+import { Input } from "../components/Input";
 
 const signInSchema = z.object({
   email: z.email("E-mail inválido"),
