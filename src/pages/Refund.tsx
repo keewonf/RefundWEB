@@ -21,14 +21,28 @@ const categories = [
   "accommodation",
 ] as const;
 
+type Category = (typeof categories)[number];
+
 const refundSchema = z.object({
   name: z
     .string()
     .min(3, { message: "Informe um nome claro para sua solicitação" }),
-  category: z.enum(categories, {
-    message: "Selecione uma categoria",
-  }),
-  amount: z.number().positive("O valor deve ser positivo"),
+  category: z
+    .union([z.enum(categories), z.literal("")])
+    .refine((value) => value !== "", {
+      message: "Selecione uma categoria",
+    }),
+  amount: z
+    .string()
+    .trim()
+    .min(1, { message: "Informe o valor" })
+    .regex(/^\d+([\.,]\d{1,2})?$/, {
+      message: "Informe um valor válido",
+    })
+    .transform((value) => Number(value.replace(",", ".")))
+    .refine((num) => num > 0, {
+      message: "O valor deve ser positivo",
+    }),
   file: z
     .file()
     .nullable()
@@ -37,7 +51,14 @@ const refundSchema = z.object({
     }),
 });
 
-type FormData = z.input<typeof refundSchema>;
+type FormData = {
+  name: string;
+  category: "" | Category;
+  amount: string;
+  file: File | null;
+};
+
+type FormOutput = z.output<typeof refundSchema>;
 
 export function Refund() {
   const {
@@ -45,12 +66,12 @@ export function Refund() {
     handleSubmit,
     setError,
     formState: { isSubmitting, errors },
-  } = useForm<FormData>({
+  } = useForm<FormData, unknown, FormOutput>({
     defaultValues: {
       name: "",
-      category: undefined,
-      amount: 0,
-      file: undefined,
+      category: "",
+      amount: "",
+      file: null,
     },
     resolver: zodResolver(refundSchema),
   });
@@ -58,7 +79,7 @@ export function Refund() {
   const navigate = useNavigate();
   const params = useParams<{ id: string }>();
 
-  async function onSubmit(data: FormData) {
+  async function onSubmit(data: FormOutput) {
     if (params.id) {
       return navigate(-1);
     }
@@ -102,6 +123,7 @@ export function Refund() {
   return (
     <div className="flex justify-center">
       <form
+        noValidate
         onSubmit={handleSubmit(onSubmit)}
         className="bg-gray-500 rounded-xl flex flex-col p-10 gap-6 lg:min-w-lg"
       >
@@ -138,6 +160,7 @@ export function Refund() {
                   legend="Categoria"
                   disabled={!!params.id}
                   {...field}
+                  value={field.value ?? ""}
                 >
                   {CATEGORIES_KEYS.map((category) => (
                     <option key={category} value={category}>
@@ -158,12 +181,9 @@ export function Refund() {
                   legend="Valor"
                   error={errors.amount?.message}
                   disabled={!!params.id}
+                  inputMode="decimal"
+                  autoComplete="off"
                   {...field}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(",", ".");
-
-                    field.onChange(Number(value));
-                  }}
                 />
               )}
             />

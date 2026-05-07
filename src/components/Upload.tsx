@@ -8,7 +8,7 @@ type Props = React.ComponentProps<"input"> & {
 export function Upload({ filename = null, onChange, error, ...rest }: Props) {
   return (
     <div>
-      <legend className="uppercase  text-xxs mb-2 text-gray-200">
+      <legend className="uppercase  text-xxs mb-2 text-gray-200 ">
         Comprovante
       </legend>
 
@@ -34,8 +34,8 @@ export function Upload({ filename = null, onChange, error, ...rest }: Props) {
         >
           <img src={uploadSvg} alt="Ícone de upload" className="w-6 h-6" />
         </label>
-        {error && <span className="text-red-500 text-xs mt-1">{error}</span>}
       </div>
+      {error && <span className="text-red-500 text-xs mt-1">{error}</span>}
     </div>
   );
 }
