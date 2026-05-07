@@ -1,12 +1,16 @@
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { Input } from "../components/Input";
+
 import searchSvg from "../assets/search.svg";
-import { Button } from "../components/Button";
-import { RefundItem, type RefundItemProps } from "../components/RefundItem";
 import { CATEGORIES } from "../utils/categories";
 import { formatCurrency } from "../utils/formatCurrency";
+
+import { Input } from "../components/Input";
+import { Button } from "../components/Button";
 import { Pagination } from "../components/Pagination";
-import { useState } from "react";
+import { RefundItem, type RefundItemProps } from "../components/RefundItem";
+
+import { useAuth} from "../hooks/useAuth"
 
 type FormData = {
   name: string;
@@ -25,6 +29,8 @@ export function Dashboard() {
   const [totalOfPage, setTotalOfPage] = useState(10);
   const [refunds, setRefunds] = useState<RefundItemProps[]>([REFUND_EXAMPLE]);
 
+  const context = useAuth()
+  
   const {
     control,
     handleSubmit,
