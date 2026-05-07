@@ -7,7 +7,6 @@ import { EmployeeRoutes } from "./EmployeeRoutes";
 import { ManagerRoutes } from "./ManagerRoutes";
 import { useAuth } from "../hooks/useAuth";
 
-
 export function Routes() {
   const { session, isLoading } = useAuth();
 
