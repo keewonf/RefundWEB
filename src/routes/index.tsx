@@ -5,23 +5,26 @@ import { Loading } from "../components/Loading";
 import { AuthRoutes } from "./AuthRoutes";
 import { EmployeeRoutes } from "./EmployeeRoutes";
 import { ManagerRoutes } from "./ManagerRoutes";
+import { useAuth } from "../hooks/useAuth";
 
 const isLoading = false;
 const session = {
   user: {
-    role: "manager",
+    role: "",
   },
 };
 
 export function Routes() {
+  const { name } = useAuth();
+
   function Route() {
     switch (session?.user.role) {
       case "manager":
-        return <ManagerRoutes/>
+        return <ManagerRoutes />;
       case "employee":
-        return <EmployeeRoutes/>
+        return <EmployeeRoutes />;
       default:
-        return <AuthRoutes/>
+        return <AuthRoutes />;
     }
   }
 
@@ -30,7 +33,7 @@ export function Routes() {
   }
   return (
     <BrowserRouter>
-      <Route/>
+      <Route />
     </BrowserRouter>
   );
 }
