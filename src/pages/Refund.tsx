@@ -66,8 +66,18 @@ export function Refund() {
     }
 
     try {
+      if (!data.file) {
+        return alert("Selecione um arquivo de comprovante");
+      }
 
-      await api.post("/refunds", {...data, filename:""})
+      const fileUploadForm = new FormData();
+      fileUploadForm.append("file", data.file);
+
+      const response = await api.post("/uploads", fileUploadForm);
+
+      const { file, ...refundData} = data
+
+      await api.post("/refunds", { ...refundData, filename: response.data.filename });
 
       navigate("/confirm", { state: { fromSubmit: true } });
     } catch (error) {
