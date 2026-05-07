@@ -11,6 +11,7 @@ import { Select } from "../components/Select";
 import { Upload } from "../components/Upload";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
+import { api } from "../services/api";
 
 type Category = keyof typeof CATEGORIES;
 
@@ -59,13 +60,15 @@ export function Refund() {
   const navigate = useNavigate();
   const params = useParams<{ id: string }>();
 
-  function onSubmit(data: FormData) {
+  async function onSubmit(data: FormData) {
     if (params.id) {
       return navigate(-1);
     }
 
     try {
-      console.log(data);
+
+      await api.post("/refunds", {...data, filename:""})
+
       navigate("/confirm", { state: { fromSubmit: true } });
     } catch (error) {
       if (error instanceof AxiosError) {
