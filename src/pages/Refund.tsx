@@ -13,8 +13,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { api } from "../services/api";
 
-type Category = keyof typeof CATEGORIES;
-
 const categories = [
   "food",
   "others",
@@ -75,9 +73,12 @@ export function Refund() {
 
       const response = await api.post("/uploads", fileUploadForm);
 
-      const { file, ...refundData} = data
+      const { file, ...refundData } = data;
 
-      await api.post("/refunds", { ...refundData, filename: response.data.filename });
+      await api.post("/refunds", {
+        ...refundData,
+        filename: response.data.filename,
+      });
 
       navigate("/confirm", { state: { fromSubmit: true } });
     } catch (error) {
