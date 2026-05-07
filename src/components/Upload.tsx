@@ -2,9 +2,10 @@ import uploadSvg from "../assets/upload.svg";
 
 type Props = React.ComponentProps<"input"> & {
   filename?: string | null;
+  error?: string;
 };
 
-export function Upload({ filename = null, onChange, ...rest }: Props) {
+export function Upload({ filename = null, onChange, error, ...rest }: Props) {
   return (
     <div>
       <legend className="uppercase  text-xxs mb-2 text-gray-200">
@@ -33,6 +34,7 @@ export function Upload({ filename = null, onChange, ...rest }: Props) {
         >
           <img src={uploadSvg} alt="Ícone de upload" className="w-6 h-6" />
         </label>
+        {error && <span className="text-red-500 text-xs mt-1">{error}</span>}
       </div>
     </div>
   );

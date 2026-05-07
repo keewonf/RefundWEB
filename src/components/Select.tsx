@@ -1,8 +1,9 @@
 type Props = React.ComponentProps<"select"> & {
   legend?: string;
+  error?: string;
 };
 
-export function Select({ legend, children, ...rest }: Props) {
+export function Select({ legend, children, error, ...rest }: Props) {
   return (
     <fieldset className="flex flex-1 max-h-20 text-gray-200 focus-within:text-green-100">
       {legend && (
@@ -20,6 +21,7 @@ export function Select({ legend, children, ...rest }: Props) {
         </option>
         {children}
       </select>
+      {error && <span className="text-red-500 text-xs mt-1">{error}</span>}
     </fieldset>
   );
 }
