@@ -1,6 +1,9 @@
-import { api } from "../services/api";
-import { AxiosError } from "axios";
 import { z, ZodError } from "zod";
+import { AxiosError } from "axios";
+
+import { api } from "../services/api";
+import { useAuth } from "../hooks/useAuth";
+
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,10 +32,13 @@ export function SignIn() {
     resolver: zodResolver(signInSchema),
   });
 
+  const auth = useAuth()
+
   async function onSubmit(data: FormData) {
     console.log(data);
     try {
       const response = await api.post("/sessions", data);
+      auth.save(response.data)
     } catch (error) {
       if (error instanceof AxiosError) {
         const message =
