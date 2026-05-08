@@ -35,11 +35,9 @@ export function SignIn() {
   const auth = useAuth();
 
   async function onSubmit(data: FormData) {
-    console.log(data);
     try {
       const response = await api.post("/sessions", data);
       auth.save(response.data);
-      console.log(response.data);
     } catch (error) {
       if (error instanceof AxiosError) {
         const message =
