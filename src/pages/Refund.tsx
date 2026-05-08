@@ -93,13 +93,16 @@ export function Refund() {
       const fileUploadForm = new FormData();
       fileUploadForm.append("file", data.file);
 
-      const response = await api.post("/uploads", fileUploadForm);
+      const response = await api.post<UploadAPIResponse>(
+        "/uploads",
+        fileUploadForm,
+      );
 
       const { file, ...refundData } = data;
 
       await api.post("/refunds", {
         ...refundData,
-        filename: response.data.filename,
+        filename: response.data.fileUrl,
       });
 
       navigate("/confirm", { state: { fromSubmit: true } });
@@ -131,7 +134,7 @@ export function Refund() {
       setValue("amount", formatCurrency(response.data.amount));
       setValue("file", null);
       console.log(response.data);
-      setFileURL(response.data.filename);
+      setFileURL(response.data.fileUrl || response.data.filename);
     } catch (error) {
       if (error instanceof AxiosError) {
         const message =
@@ -235,7 +238,11 @@ export function Refund() {
         {params.id && fileURL ? (
           <a
             className="flex justify-center text-green-100 text-sm font-semibold items-center gap-2 my-6 hover:opacity-70 transition ease-linear"
-            href={`http://localhost:3333/uploads/${fileURL}`}
+            href={
+              fileURL.startsWith("http")
+                ? fileURL
+                : `http://localhost:3333/uploads/${fileURL}`
+            }
             target="_blank"
           >
             <img src={fileSvg} alt="Ícone de arquivo" />
