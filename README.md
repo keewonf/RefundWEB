@@ -24,23 +24,31 @@ O **Refund Web** é a interface de um sistema de solicitação e gestão de reem
 
 ## Screenshots
 
-Substitua os caminhos abaixo pelas imagens reais quando tirar os prints.
+As imagens abaixo mostram o fluxo principal da aplicação, do acesso inicial até a finalização de uma solicitação.
 
-### Login
+### 1. Login
 
-![Tela de login](src/assets/screenshots/login-placeholder.png)
+![Tela de login](src/assets/screenshots/login.jpeg)
 
-### Dashboard
+### 2. Cadastro
 
-![Tela do dashboard](src/assets/screenshots/dashboard-placeholder.png)
+![Tela de cadastro](src/assets/screenshots/register.jpeg)
 
-### Nova solicitação
+### 3. Dashboard
 
-![Tela de nova solicitacao](src/assets/screenshots/new-refund-placeholder.png)
+![Tela do dashboard](src/assets/screenshots/allRefunds.jpeg)
 
-### Detalhe da solicitação
+### 4. Nova solicitação
 
-![Tela de detalhe da solicitacao](src/assets/screenshots/refund-detail-placeholder.png)
+![Tela de nova solicitacao](src/assets/screenshots/createRefund.jpeg)
+
+### 5. Detalhe da solicitação
+
+![Tela de detalhe da solicitacao](src/assets/screenshots/seeRefund.jpeg)
+
+### 6. Solicitação enviada
+
+![Tela de sucesso](src/assets/screenshots/success.jpeg)
 
 ## Stack utilizada
 
@@ -82,19 +90,15 @@ npm install
 
 ### 2. Configurar URL da API
 
-Atualmente a base URL esta configurada em `src/services/api.ts`.
+Crie um arquivo `.env` na raiz do projeto com a URL da sua API.
 
-Substitua pelo endpoint da sua API:
-
-```ts
-baseURL: "COLE_A_URL_DA_API_AQUI";
+```env
+VITE_API_URL=http://localhost:3333
 ```
 
-Se preferir, mantenha local para desenvolvimento:
+Você pode usar o arquivo `.env.example` como base para configurar outro ambiente.
 
-```ts
-baseURL: "http://localhost:3333";
-```
+No código, a aplicação lê essa variável em `src/services/api.ts`.
 
 ### 3. Rodar em desenvolvimento
 
@@ -116,7 +120,7 @@ npm run preview
 
 ## API (backend)
 
-- Repositório/API URL: **COLE_O_LINK_DA_API_AQUI**
+- Repositório/API URL: [RefundAPI](https://github.com/keewonf/RefundAPI)
 
 ## Melhorias implementadas
 
@@ -130,8 +134,8 @@ Além da base do curso, foram aplicadas melhorias como:
 
 **Lucas Moura**
 
-- GitHub: (https://github.com/keewonf)
-- LinkedIn: (https://www.linkedin.com/in/lucas-moura-261356268/)
+- GitHub: [keewonf](https://github.com/keewonf)
+- LinkedIn: [Lucas Moura](https://www.linkedin.com/in/lucas-moura-261356268/)
 
 ## Créditos
 
