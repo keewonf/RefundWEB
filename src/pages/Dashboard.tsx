@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
+import { AxiosError } from "axios";
+
+import { api } from "../services/api";
 
 import searchSvg from "../assets/search.svg";
 import { CATEGORIES } from "../utils/categories";
@@ -10,7 +13,7 @@ import { Button } from "../components/Button";
 import { Pagination } from "../components/Pagination";
 import { RefundItem, type RefundItemProps } from "../components/RefundItem";
 
-import { useAuth} from "../hooks/useAuth"
+import { useAuth } from "../hooks/useAuth";
 
 type FormData = {
   name: string;
@@ -24,16 +27,19 @@ const REFUND_EXAMPLE = {
   categoryImg: CATEGORIES["transport"].icon,
 };
 
+const PER_PAGE = 5;
+
 export function Dashboard() {
   const [page, setPage] = useState(1);
-  const [totalOfPage, setTotalOfPage] = useState(10);
+  const [totalOfPage, setTotalOfPage] = useState(0);
   const [refunds, setRefunds] = useState<RefundItemProps[]>([REFUND_EXAMPLE]);
 
-  const context = useAuth()
-  
+  const context = useAuth();
+
   const {
     control,
     handleSubmit,
+    watch,
     formState: { isSubmitting },
   } = useForm<FormData>({
     defaultValues: {
@@ -41,8 +47,23 @@ export function Dashboard() {
     },
   });
 
-  function fetchRefunds(data: FormData) {
-    console.log(data);
+  const search = watch("name");
+
+  async function fetchRefunds() {
+    try {
+      const response = await api.get(
+        `/refunds?name=${search.trim()}&page=${page}&perPage=${PER_PAGE}`,
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+
+      if (error instanceof AxiosError) {
+        return alert(error.response?.data.message);
+      }
+
+      alert("Não foi possível carregar");
+    }
   }
 
   function handlePagination(action: "next" | "previous") {
@@ -55,6 +76,10 @@ export function Dashboard() {
       return prev;
     });
   }
+
+  useEffect(() => {
+    fetchRefunds();
+  }, [page, search]);
 
   return (
     <div className="flex flex-col  p-10 bg-gray-500 rounded-xl md:min-w-3xl ">
