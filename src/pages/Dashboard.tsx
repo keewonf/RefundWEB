@@ -19,7 +19,22 @@ type FormData = {
   name: string;
 };
 
-const PER_PAGE = 5;
+const PER_PAGE = 2;
+
+// Hook de debounce
+function useDebounce<T>(value: T, delay: number) {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 
 export function Dashboard() {
   const [page, setPage] = useState(1);
@@ -40,6 +55,7 @@ export function Dashboard() {
   });
 
   const search = watch("name");
+  const debouncedSearch = useDebounce(search, 800);
 
   async function fetchRefunds() {
     try {
@@ -78,10 +94,13 @@ export function Dashboard() {
       return prev;
     });
   }
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
 
   useEffect(() => {
     fetchRefunds();
-  }, [page, search]);
+  }, [page, debouncedSearch]);
 
   return (
     <div className="flex flex-col  p-10 bg-gray-500 rounded-xl md:min-w-3xl ">
