@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import { z } from "zod";
 
+import { Loading } from "../components/Loading";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import { Select } from "../components/Select";
@@ -12,6 +13,8 @@ import { Upload } from "../components/Upload";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { api } from "../services/api";
+import { useEffect, useState } from "react";
+import { formatCurrency } from "../utils/formatCurrency";
 
 const categories = [
   "food",
@@ -65,6 +68,7 @@ export function Refund() {
     control,
     handleSubmit,
     setError,
+    setValue,
     formState: { isSubmitting, errors },
   } = useForm<FormData, unknown, FormOutput>({
     defaultValues: {
@@ -75,7 +79,8 @@ export function Refund() {
     },
     resolver: zodResolver(refundSchema),
   });
-
+  const [fileURL, setFileURL] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const params = useParams<{ id: string }>();
 
@@ -118,6 +123,47 @@ export function Refund() {
 
       return;
     }
+  }
+
+  async function fetchRefunds(id: string) {
+    setIsLoading(true);
+    try {
+      const response = await api.get<RefundAPIResponse>(`/refunds/${id}`);
+
+      setValue("name", response.data.name);
+      setValue("category", response.data.category);
+      setValue("amount", formatCurrency(response.data.amount));
+      setValue("file", null);
+      console.log(response.data);
+      setFileURL(response.data.filename);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const message =
+          error.response?.data?.message ?? "Erro de conexão com o servidor";
+        setError("root", {
+          message,
+        });
+        return;
+      }
+
+      setError("root", {
+        message: "Erro inesperado. Tente novamente",
+      });
+
+      return;
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (params.id) {
+      fetchRefunds(params.id);
+    }
+  }, [params.id]);
+
+  if (isLoading) {
+    return <Loading />;
   }
 
   return (
@@ -190,10 +236,10 @@ export function Refund() {
           </div>
         </div>
 
-        {params.id ? (
+        {params.id && fileURL ? (
           <a
             className="flex justify-center text-green-100 text-sm font-semibold items-center gap-2 my-6 hover:opacity-70 transition ease-linear"
-            href=""
+            href={`http://localhost:3333/uploads/${fileURL}`}
             target="_blank"
           >
             <img src={fileSvg} alt="Ícone de arquivo" />
