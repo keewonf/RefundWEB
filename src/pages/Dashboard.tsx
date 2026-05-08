@@ -56,7 +56,7 @@ export function Dashboard() {
         })),
       );
 
-      setTotalOfPage(response.data.pagination.totalPages)
+      setTotalOfPage(response.data.pagination.totalPages);
     } catch (error) {
       console.log(error);
 
@@ -87,7 +87,7 @@ export function Dashboard() {
     <div className="flex flex-col  p-10 bg-gray-500 rounded-xl md:min-w-3xl ">
       <h1 className="text-gray-100 font-bold text-xl flex-1">Solicitações</h1>
       <form
-        className="flex flex-1 items-center justify-between pb-6 border-b border-b-gray-400 md:flex-row gap-2 mt-6"
+        className="flex flex-1 items-start justify-between pb-6 border-b border-b-gray-400 md:flex-row gap-2 mt-6"
         onSubmit={handleSubmit(fetchRefunds)}
       >
         <Controller
