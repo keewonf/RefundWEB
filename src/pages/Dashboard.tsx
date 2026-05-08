@@ -13,8 +13,6 @@ import { Button } from "../components/Button";
 import { Pagination } from "../components/Pagination";
 import { RefundItem, type RefundItemProps } from "../components/RefundItem";
 
-import { useAuth } from "../hooks/useAuth";
-
 type FormData = {
   name: string;
 };
@@ -40,8 +38,6 @@ export function Dashboard() {
   const [page, setPage] = useState(1);
   const [totalOfPage, setTotalOfPage] = useState(0);
   const [refunds, setRefunds] = useState<RefundItemProps[]>([]);
-
-  const context = useAuth();
 
   const {
     control,
