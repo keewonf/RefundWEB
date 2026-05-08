@@ -5,7 +5,7 @@ type Props = React.ComponentProps<"select"> & {
 
 export function Select({ legend, children, error, ...rest }: Props) {
   return (
-    <fieldset className="flex flex-1 max-h-20 text-gray-200 focus-within:text-green-100 flex-col">
+    <fieldset className="flex flex-1  text-gray-200 focus-within:text-green-100 flex-col">
       {legend && (
         <legend className="uppercase  text-xxs mb-2 text-inherit">
           {legend}
@@ -21,7 +21,7 @@ export function Select({ legend, children, error, ...rest }: Props) {
         </option>
         {children}
       </select>
-      {error && <span className="text-red-500 text-xs mt-1">{error}</span>}
+      <span className="text-red-500 text-xs min-h-4.5 block ">{error}</span>
     </fieldset>
   );
 }

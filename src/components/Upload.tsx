@@ -35,7 +35,7 @@ export function Upload({ filename = null, onChange, error, ...rest }: Props) {
           <img src={uploadSvg} alt="Ícone de upload" className="w-6 h-6" />
         </label>
       </div>
-      {error && <span className="text-red-500 text-xs mt-1">{error}</span>}
+      <span className="text-red-500 text-xs min-h-4.5 block ">{error}</span>
     </div>
   );
 }

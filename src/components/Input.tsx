@@ -19,7 +19,7 @@ export function Input({ legend, error, type = "text", ...rest }: Props) {
         }`}
         {...rest}
       />
-      {error && <span className="text-red-500 text-xs mt-1">{error}</span>}
+      <span className="text-red-500 text-xs min-h-4.5 block ">{error}</span>
     </fieldset>
   );
 }
