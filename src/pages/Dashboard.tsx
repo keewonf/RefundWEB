@@ -51,10 +51,10 @@ export function Dashboard() {
 
   async function fetchRefunds() {
     try {
-      const response = await api.get(
+      const response = await api.get<RefundsPaginationAPIResponse>(
         `/refunds?name=${search.trim()}&page=${page}&perPage=${PER_PAGE}`,
       );
-      console.log(response);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
 
