@@ -5,9 +5,17 @@ type RefundAPIResponse = {
   category: CategoriesAPIEnum;
   amount: number;
   filename: string;
+  fileUrl?: string;
+  publicId?: string;
   user: {
     name: string;
   };
+};
+
+type UploadAPIResponse = {
+  filename: string;
+  fileUrl: string;
+  publicId: string;
 };
 
 type RefundsPaginationAPIResponse = {
