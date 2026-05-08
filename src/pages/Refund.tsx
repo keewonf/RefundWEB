@@ -85,10 +85,6 @@ export function Refund() {
   const params = useParams<{ id: string }>();
 
   async function onSubmit(data: FormOutput) {
-    if (params.id) {
-      return navigate(-1);
-    }
-
     try {
       if (!data.file) {
         return alert("Selecione um arquivo de comprovante");
@@ -264,9 +260,15 @@ export function Refund() {
           {errors.root?.message}
         </p>
 
-        <Button type="submit" isLoading={isSubmitting}>
-          {params.id ? "Voltar" : "Enviar"}
-        </Button>
+        {params.id ? (
+          <Button type="button" onClick={() => navigate(-1)}>
+            Voltar
+          </Button>
+        ) : (
+          <Button type="submit" isLoading={isSubmitting}>
+            Enviar
+          </Button>
+        )}
       </form>
     </div>
   );
